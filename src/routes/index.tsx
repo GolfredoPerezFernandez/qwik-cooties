@@ -261,7 +261,7 @@ const sliderSettings = {
         <img class="rounded-t-lg" height={300} width={240} src={item.image} alt="" />
     </a>
     <div class="p-5">
-        <a href="#">
+        <a key={index} href="#">
             <h6 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{"Cootie "+item.name}</h6>
         </a>
         <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{JSON.stringify(item.attributes).toString()}</p>
