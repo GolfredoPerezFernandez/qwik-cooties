@@ -104,6 +104,7 @@ useTask$(async ({ track }) => {
   track(() => userAccount.value); // Re-run this task if userAccount.value changes
   if (userAccount.value) {
     try {
+   
       const provider = new ethers.BrowserProvider( window.ethereum);
       const contract = new ethers.Contract(
         "0xDeC023Bb7FbC90Fe6211716d10261cE9EEb294C7",
@@ -228,7 +229,7 @@ console.log("nftsMinted "+  nftsMinted.value)
 
   }
 })
-const handleChange=$((e)=>{
+const handleChange=$((e:any)=>{
   state.inputValue=e.target.value
 })
 
