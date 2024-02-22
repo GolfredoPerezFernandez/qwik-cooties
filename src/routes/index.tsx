@@ -7,7 +7,7 @@ import { Slider } from "qwik-slider";
 
 import { Application } from '@splinetool/runtime';
 import { mintAbi } from '~/abis/mintAbi';
-import { Modal, ModalContent, ModalFooter, ModalHeader } from '@qwik-ui/headless';
+import { Modal } from '@qwik-ui/headless';
 import styles from '../snippets/animation.css?inline';
 type NFTJSON = string[];
 interface Metadata{
