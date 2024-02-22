@@ -164,7 +164,6 @@ if(response){
 
   showSig.value=true
 for(let i=0;i<nftBalance;i++){
-  console.log("entro 2")
 
   const nft = await mintContract.tokenOfOwnerByIndex(userAccount.value, i);
   const metadata = await mintContract.tokenURI(nft);
@@ -260,8 +259,8 @@ const sliderSettings = {
 {nftsMetadataJSON.map((item, index) => (
 
   <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-    <a href="#">
-        <img class="rounded-t-lg" src={item.image} alt="" />
+    <a key={index} href="#">
+        <img class="rounded-t-lg" height={300} width={240} src={item.image} alt="" />
     </a>
     <div class="p-5">
         <a href="#">
