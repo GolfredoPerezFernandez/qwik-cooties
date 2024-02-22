@@ -146,19 +146,12 @@ if(web3provider&&web3provider.value){
   if (e.target.name === 'Button-Primary Instance') {  
       const mintAmount=parseInt(state.inputValue)
       const ethPrice=1
-
-      console.log('Minted');
-
-
       const totalCostInEther = (ethPrice * mintAmount).toString(); // Total cost in Ether
       const totalCostInWei = ethers.parseUnits(totalCostInEther, "ether"); // Convert to Wei
-
       loadingText.value='Minting '+state.inputValue+' Lil Cooties..'
-
       const res = await mintContract.mintWithFLR(userAccount.value, mintAmount, {value: totalCostInWei});
       loadingText.value='Waiting blockchain confirmation..'
-
-       const response = await res.wait();
+      const response = await res.wait();
 
 if(response){
   console.log("entro "+JSON.stringify(response))
@@ -177,7 +170,6 @@ for(let i=0;i<nftBalance;i++){
   const metadata = await mintContract.tokenURI(nft);
 
  
-  console.log("nft "+metadata)
   nftsMinted.value.push(nft)
   nftsMetadata.value.push(metadata)
   const response = await fetch(metadata);
@@ -185,7 +177,6 @@ for(let i=0;i<nftBalance;i++){
     throw new Error(`HTTP error! status: ${response.status}`);
   }
   const metadataJSON = await response.json();
-  console.log("metadataJSON "+  metadataJSON)
 
   nftsMetadataJSON.push({
     name:metadataJSON.name,
@@ -193,13 +184,7 @@ for(let i=0;i<nftBalance;i++){
     attributes:metadataJSON.attributes,    
     tokenId:metadataJSON.name,
     image:metadataJSON.image})
-
 }
-
-console.log("nftsMetadataJSON "+ JSON.stringify(nftsMetadataJSON) )
-
-console.log("nftsMinted "+  nftsMinted.value)
-
 }
 
     } else if(e.target.name === 'Button-Danger' ){
@@ -243,10 +228,13 @@ const sliderSettings = {
   return (
     <>
        <canvas style={{width:"100%",height: "100%",justifyContent:"center",alignItems:"center",position:"fixed",zIndex:-1}} id="canvas3d" />
+       
        <span class="responsive-text">
   Free Mints Available: {freeMints.value.toString()}
 </span>
+
 <h4 style={{color:'white'}}>{userAccount.value}</h4>
+
 <h4 style={{color:'white'}}>{loadingText.value}</h4>
 
 
@@ -296,6 +284,7 @@ const sliderSettings = {
     </>
   );
 });
+
 export function CloseIcon(props: QwikIntrinsicElements['svg'], key: string) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props} key={key}>
