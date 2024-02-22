@@ -59,7 +59,6 @@ if(provider){
   const accounts = await provider.send("eth_requestAccounts", []);
   const account = accounts[0];
   web3provider.value=provider;
-  console.log("holaa "+account)
   userAccount.value=account;
 
 }
@@ -130,7 +129,6 @@ useVisibleTask$(async ()=>{
 		mode: 'no-cors',
 	}).then( () => {
     spline.addEventListener('mouseDown', async (e) => {
-console.log(e.target.name)
 try{
   isLoading.value=true
 
