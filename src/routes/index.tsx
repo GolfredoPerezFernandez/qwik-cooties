@@ -32,6 +32,7 @@ export default component$(() => {
   const nftsMetadata = useSignal<NFTJSON>([]);
   const nftsMetadataJSON = useStore<NFTMetadata>([]);
   const freeMints = useSignal<number>(0);
+  
   const state = useStore({
     inputValue:''
   });
@@ -81,6 +82,7 @@ const switchToFlare = $(async () => {
       }
   }
 });
+
 const addFlare = $(async () => {
 
   const provider = new ethers.BrowserProvider(window.ethereum);
@@ -117,7 +119,23 @@ useTask$(async ({ track }) => {
     }
   }
 });
-
+useTask$(async ({ track }) => {
+  track(() => userAccount.value); // Re-run this task if userAccount.value changes
+  if (userAccount.value) {
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const contract = new ethers.Contract(
+        "0xDeC023Bb7FbC90Fe6211716d10261cE9EEb294C7",
+        mintAbi,
+        provider
+      );
+      const freeMintsAvailable = await contract.freeMints(userAccount.value);
+      freeMints.value = parseInt(freeMintsAvailable, 10);
+    } catch (error) {
+      console.error('Error fetching free mints:', error);
+    }
+  }
+});
 useVisibleTask$(async ()=>{
   await initiateWalletConnection()
 
