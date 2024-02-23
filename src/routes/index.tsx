@@ -170,7 +170,6 @@ if(web3provider&&web3provider.value){
       const response = await res.wait();
 
 if(response){
-  console.log("entro "+JSON.stringify(response))
 
   const nftBalance = await mintContract.balanceOf(userAccount.value);
   console.log("nftBalance "+nftBalance)
