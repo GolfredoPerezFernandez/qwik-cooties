@@ -182,6 +182,7 @@ for(let i=0;i<mintAmount;i++){
     if(response){
 
       const nftBalance = await mintContract.balanceOf(userAccount.value);
+      console.log("nftBalance "+nftBalance)
       loadingText.value='Collecting NFT Info..'
 
       isLoading.value=false
