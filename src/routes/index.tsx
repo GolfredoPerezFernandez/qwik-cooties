@@ -28,7 +28,6 @@ export default component$(() => {
   const isLoading = useSignal<any>(false);
   const loadingText = useSignal<any>("");
 
-  const nftsMinted = useSignal<any>([]);
   const nftsMetadata = useSignal<NFTJSON>([]);
   const nftsMetadataJSON = useStore<NFTMetadata>([]);
   const freeMints = useSignal<number>(0);
@@ -172,15 +171,13 @@ useVisibleTask$(async ()=>{
         
           loadingText.value='Waiting blockchain confirmation..'
           const response = await res.wait();
-console.log(JSON.stringify(response))
-let nftList=[]
+const nftList=[]
 const hexToDecimal = (hex:string) => parseInt(hex, 16);
 for(let i=0;i<mintAmount;i++){
 
   const nftId = hexToDecimal(response.logs[i].topics[3]);
   nftList.push(nftId)
 }
-console.log("nftList "+nftList)
 
     if(response){
 
