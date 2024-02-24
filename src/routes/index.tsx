@@ -210,7 +210,6 @@ for(let i=0;i<mintAmount;i++){
     }
 
     } else if(e.target.name === 'Button-Danger' ){
-      console.log('I have been clicked Danger!');
      
       await mintContract.freeMint(1);
       
