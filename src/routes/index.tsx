@@ -136,8 +136,9 @@ useTask$(async ({ track }) => {
     }
   }
 });
+
+
 useVisibleTask$(async ()=>{
-  await initiateWalletConnection()
 
   const canvas:any = document.getElementById('canvas3d');
   const spline = new Application(canvas);
@@ -147,59 +148,69 @@ useVisibleTask$(async ()=>{
 		mode: 'no-cors',
 	}).then( () => {
     spline.addEventListener('mouseDown', async (e) => {
-try{
-  isLoading.value=true
+    try{
+    
+      isLoading.value=true
 
-if(!userAccount.value){
-  await initiateWalletConnection()
-} 
+    if(!userAccount.value){
+      await initiateWalletConnection()
+    } 
 
-await switchToFlare()
-if(web3provider&&web3provider.value){
-  const signer = await web3provider.value.getSigner();
+    await switchToFlare()
+    if(web3provider&&web3provider.value){
+      const signer = await web3provider.value.getSigner();
 
-  const mintContract = new ethers.Contract(mintAddress, mintAbi,signer );
-  if (e.target.name === 'Button-Primary Instance') {  
-      const mintAmount=parseInt(state.inputValue)
-      const ethPrice=1
-      const totalCostInEther = (ethPrice * mintAmount).toString(); // Total cost in Ether
-      const totalCostInWei = ethers.parseUnits(totalCostInEther, "ether"); // Convert to Wei
-      loadingText.value='Minting '+state.inputValue+' Lil Cooties..'
-      const res = await mintContract.mintWithFLR(userAccount.value, mintAmount, {value: totalCostInWei});
-      loadingText.value='Waiting blockchain confirmation..'
-      const response = await res.wait();
+      const mintContract = new ethers.Contract(mintAddress, mintAbi,signer );
+      if (e.target.name === 'Button-Primary Instance') {  
+          const mintAmount=parseInt(state.inputValue)
+          const ethPrice=1
+          const totalCostInEther = (ethPrice * mintAmount).toString(); // Total cost in Ether
+          const totalCostInWei = ethers.parseUnits(totalCostInEther, "ether"); // Convert to Wei
+          loadingText.value='Minting '+state.inputValue+' Lil Cooties..'
+        
+          const res = await mintContract.mintWithFLR(userAccount.value, mintAmount, {value: totalCostInWei});
+        
+          loadingText.value='Waiting blockchain confirmation..'
+          const response = await res.wait();
+console.log(JSON.stringify(response))
+let nftList=[]
+const hexToDecimal = (hex:string) => parseInt(hex, 16);
+for(let i=0;i<mintAmount;i++){
 
-if(response){
-
-  const nftBalance = await mintContract.balanceOf(userAccount.value);
-  console.log("nftBalance "+nftBalance)
-  loadingText.value='Collecting NFT Info..'
-
-  isLoading.value=false
-
-  showSig.value=true
-for(let i=0;i<nftBalance;i++){
-
-  const nft = await mintContract.tokenOfOwnerByIndex(userAccount.value, i);
-  const metadata = await mintContract.tokenURI(nft);
-
- 
-  nftsMinted.value.push(nft)
-  nftsMetadata.value.push(metadata)
-  const response = await fetch(metadata);
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  const metadataJSON = await response.json();
-
-  nftsMetadataJSON.push({
-    name:metadataJSON.name,
-    description:metadataJSON.description,    
-    attributes:metadataJSON.attributes,    
-    tokenId:metadataJSON.name,
-    image:metadataJSON.image})
+  const nftId = hexToDecimal(response.logs[i].topics[3]);
+  nftList.push(nftId)
 }
-}
+console.log("nftList "+nftList)
+
+    if(response){
+
+      const nftBalance = await mintContract.balanceOf(userAccount.value);
+      console.log("nftBalance "+nftBalance)
+      loadingText.value='Collecting NFT Info..'
+
+      isLoading.value=false
+
+      showSig.value=true
+    for(let i=0;i<nftList.length;i++){
+
+      const metadata = await mintContract.tokenURI(nftList[i]);
+
+    
+      nftsMetadata.value.push(metadata)
+      const response = await fetch(metadata);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const metadataJSON = await response.json();
+
+      nftsMetadataJSON.push({
+        name:metadataJSON.name,
+        description:metadataJSON.description,    
+        attributes:metadataJSON.attributes,    
+        tokenId:metadataJSON.name,
+        image:metadataJSON.image})
+    }
+    }
 
     } else if(e.target.name === 'Button-Danger' ){
       console.log('I have been clicked Danger!');
@@ -268,8 +279,6 @@ const sliderSettings = {
         bind:show={showSig}
         class="my-animation pt-16 shadow-dark-medium bg-background text-foreground max-w-[50rem] rounded-md p-[28px] backdrop:backdrop-blur backdrop:backdrop-brightness-50 dark:backdrop:backdrop-brightness-100"
       >
-
-
 <Slider {...sliderSettings}>
 {nftsMetadataJSON.map((item, index) => (
 
@@ -288,8 +297,6 @@ const sliderSettings = {
   ))}
 
     </Slider>
-
-      
       </Modal>
 
 
