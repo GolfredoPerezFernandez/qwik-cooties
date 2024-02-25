@@ -67,6 +67,7 @@ if(provider){
   console.log(error);}
 });
 const switchToFlare = $(async () => {
+  console.log("hola");
 
   try {
       const provider = new ethers.BrowserProvider( window.ethereum);
